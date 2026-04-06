@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class User(AbstractUser):
     mobile_number = models.CharField(max_length=15, unique=True)
     otp = models.CharField(max_length=6, blank=True, null=True)
@@ -10,6 +11,27 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class FriendRequest(models.Model):
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('ACCEPTED', 'Accepted'),
+        ('DECLINED', 'Declined'),
+    ]
+    
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_friend_requests')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_friend_requests')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('sender', 'receiver')
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.sender.first_name} -> {self.receiver.first_name}: {self.status}"
 
 
 class Contact(models.Model):

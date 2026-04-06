@@ -16,6 +16,12 @@ urlpatterns = [
     path('messages/', views.GetMessagesView.as_view()),
     path('messages/unread/', views.GetUnreadMessagesView.as_view()),
     
+    # Friend Request APIs
+    path('friends/request/', views.SendFriendRequestView.as_view()),
+    path('friends/respond/', views.RespondToFriendRequestView.as_view()),
+    path('friends/cancel/', views.CancelFriendRequestView.as_view()),
+    path('friends/pending/', views.GetPendingFriendRequestsView.as_view()),
+    
     # Group Chat APIs
     path('groups/create/', group_views.CreateGroupView.as_view()),
     path('groups/add-members/', group_views.AddGroupMembersView.as_view()),
